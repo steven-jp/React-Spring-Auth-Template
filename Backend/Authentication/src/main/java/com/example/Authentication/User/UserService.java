@@ -10,7 +10,7 @@ public class UserService {
     @Autowired
     private UserRepository repo;
 
-    public User saveUser(User user) {
+    public User registerUser(User user) {
         return repo.save(user);
     }
 
@@ -18,7 +18,6 @@ public class UserService {
         repo.deleteById(id);
         return "Deleted user : " + id;
     }
-
     public User getUser(Long id) {
         return repo.findById(id).orElse(new User());
     }
