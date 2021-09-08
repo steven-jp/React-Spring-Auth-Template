@@ -11,8 +11,6 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService service;
-    @Autowired
-    UserRepository userRepository;
 
     @GetMapping("/user/{id}")
     public User getUser(@PathVariable Long id) {
@@ -20,38 +18,23 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public String getAllUsers() {
-        return "GET USER TEST! ";
+    public String test() {
+        return "GET TEST! ";
     }
 
-//    @PostMapping("/user")
-//    public User saveUser(@RequestBody User user) {
-//        return service.saveUser(user);
-//    }
     @PostMapping("/user/register")
-    public String registerUser(@RequestBody User user) {
-        System.out.println("HERE");
-        if (userRepository.existsByEmail(user.getEmail())){
-            return "User with that email already exists";
-        }
-        if (user.getRoles() == null){
-            List<String> roles = new ArrayList<>();
-            roles.add("USER");
-            user.setRole(roles);
-        }
-        service.registerUser(user);
-        return "User" + user.getEmail() + "successfully registered";
-
+    public String registerUser(@RequestBody RegistrationDto user) {
+        return service.registerUser(user);
     }
 
     //update password based on userid
-    @PutMapping("/user/{id}/{password}")
-    public String updateUser(@PathVariable Long id,@PathVariable String password) {
-        return service.updateUser(id, password);
+    @PutMapping("/user/{email}/{password}/{newPassword}")
+    public String updateUser(@PathVariable String email, @PathVariable String password, @PathVariable String newPassword) {
+        return service.updateUserPassword(email, password, newPassword);
     }
 
-    @DeleteMapping("/user/{id}")
-    public String deleteUser(@PathVariable Long id) {
-        return service.deleteUser(id);
+    @DeleteMapping("/user/{email}/{password}")
+    public String deleteUser(@PathVariable String email, @PathVariable String password) {
+        return service.deleteUser(email, password);
     }
 }
