@@ -6,7 +6,11 @@ import {
   Grid,
   Container,
 } from "@material-ui/core";
-import { createUser, loginUser } from "../Components/Authentication/Api.js";
+import {
+  createUser,
+  isLoggedIn,
+  loginUser,
+} from "../Components/Authentication/Api.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -111,6 +115,13 @@ const Login = () => {
           </p>
         </Grid>
       )}
+      {/* <Button
+        color="primary"
+        style={{ textTransform: "none" }}
+        onClick={() => isLoggedIn()}
+      >
+        --- TESTER ---
+      </Button> */}
     </Container>
   );
 };
