@@ -13,7 +13,7 @@ public class User {
     @Column(unique = true)
     private String email;
     private String password;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles;
 
 

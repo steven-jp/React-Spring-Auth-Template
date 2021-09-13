@@ -1,48 +1,55 @@
 import axios from "axios";
 
-let URL = "http://localhost:3000";
+let URL = "http://localhost:8080";
 
 async function createUser(user) {
   axios
-    .post(
-      URL + "/user/register",
-      {
-        username: user.username,
-        email: user.email,
-        password: user.password,
-        confirmedPassword: user.confirmedPassword,
-      },
-      { withCredentials: true, credentials: "include" },
-    )
+    .post(URL + "/user/register", {
+      email: user.email,
+      password: user.password,
+      confirmedPassword: user.confirmedPassword,
+    })
     .then((res) => {
       console.log(res.data);
-      if (res.data.id) {
-        window.location.assign("/");
-      }
+      // if (res.data.id) {
+      //   window.location.assign("/");
+      // }
     })
     .catch((error) => {
-      console.log(error.response.data);
+      console.log(error);
     });
 }
 
 async function loginUser(user) {
   axios
     .post(
-      URL + "/user/login",
+      URL + "/login",
       {
         email: user.email,
         password: user.password,
       },
-      { withCredentials: true, credentials: "include" },
+      {
+        headers: {
+          // "Content-Type": "application/x-www-form-urlencoded",
+          Authorization:
+            "Basic " + window.btoa(user.email + ":" + user.password),
+          // "Access-Control-Allow-Origin": "*",
+        },
+      },
+      // { withCredentials: true, credentials: "include" },
+      // { credentials: "include" },
     )
     .then((res) => {
       console.log(res.data);
-      if (res.data.id) {
-        window.location.assign("/");
-      }
+      console.log(res);
+
+      // if (res.data.id) {
+      //   window.location.assign("/");
+      // }
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
+      console.log(error.response);
     });
 }
 

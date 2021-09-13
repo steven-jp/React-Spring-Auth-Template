@@ -1,18 +1,48 @@
 package com.example.Authentication.User;
 
+import com.example.Authentication.Security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserService {
+    @Autowired
+    AuthenticationManager authenticationManager;
     @Autowired
     private UserRepository repo;
     @Autowired
     PasswordEncoder encoder;
+    @Autowired
+    JwtUtil util;
+
+    public ResponseEntity<?> loginUser(User user) throws Exception {
+        try {
+            Authentication auth = authenticationManager.authenticate(new
+                    UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+            String token = util.generateToken(auth);
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization: Bearer ", token);
+
+            return new ResponseEntity<Object>(headers,HttpStatus.OK);
+        }catch (AuthenticationException e){
+            throw new Exception("Invalid credentials");
+        }
+    }
 
     public String registerUser(RegistrationDto user) {
         //check if email exists in repo
@@ -39,7 +69,7 @@ public class UserService {
         newUser.setEmail(user.getEmail());
 
         repo.save(newUser);
-        return "User" + newUser.getEmail() + "successfully registered";
+        return "User " + newUser.getEmail() + " successfully registered";
     }
 
     public String deleteUser(String email, String password) {

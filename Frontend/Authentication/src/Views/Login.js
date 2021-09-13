@@ -23,7 +23,6 @@ const Login = () => {
   const classes = useStyles();
   const [user, setUser] = useState({
     email: "",
-    username: "",
     password: "",
     confirmedPassword: "",
   });
@@ -74,13 +73,6 @@ const Login = () => {
         </Grid>
       ) : (
         <Grid container direction="column">
-          <TextField
-            label="Username"
-            name="username"
-            value={user.username}
-            InputLabelProps={{ required: true }}
-            onChange={changeHandler}
-          />
           <TextField
             label="Email"
             name="email"
