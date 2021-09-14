@@ -34,7 +34,6 @@ public class UserService {
         try {
             Authentication auth = authenticationManager.authenticate(new
                     UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
-//            SecurityContextHolder.getContext().setAuthentication(auth);
             String token = util.generateToken(auth);
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization: Bearer ", token);
@@ -106,10 +105,16 @@ public class UserService {
         }
         return responseBuilder("User was not found", HttpStatus.UNAUTHORIZED);
     }
+    //authentication filter takes care of logged in check
+    public ResponseEntity<Object> isLoggedIn() {
+        return responseBuilder("User is logged in", HttpStatus.OK);
+    }
 
     private ResponseEntity<Object> responseBuilder(String msg, HttpStatus status){
         JSONObject json = new JSONObject();
         json.appendField("Message", msg);
         return new ResponseEntity<Object>(json,status);
     }
+
+
 }

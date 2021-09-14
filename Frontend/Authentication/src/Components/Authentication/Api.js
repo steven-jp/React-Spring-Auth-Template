@@ -4,22 +4,11 @@ let URL = "http://localhost:8080";
 
 async function createUser(user) {
   axios
-    .post(
-      URL + "/user/register",
-      {
-        email: user.email,
-        password: user.password,
-        confirmedPassword: user.confirmedPassword,
-      },
-      {
-        headers: {
-          // // "Content-Type": "application/x-www-form-urlencoded",
-          // Authorization:
-          //   "Bearer " + window.btoa(user.email + ":" + user.password),
-          // "Access-Control-Allow-Origin": "*",
-        },
-      },
-    )
+    .post(URL + "/user/register", {
+      email: user.email,
+      password: user.password,
+      confirmedPassword: user.confirmedPassword,
+    })
     .then((res) => {
       // if (res.status === 200) {
       //   window.location.assign("/login");
@@ -51,7 +40,7 @@ async function loginUser(user) {
       console.log(token);
       if (res.status === 200 && token) {
         localStorage.setItem("token", token);
-        // window.location.assign("/");
+        window.location.assign("/");
       }
     })
     .catch((error) => {
@@ -59,22 +48,7 @@ async function loginUser(user) {
     });
 }
 
-async function logoutUser() {
-  axios
-    .get(URL + "/user/logout", {
-      withCredentials: true,
-      credentials: "include",
-    })
-    .then((res) => {
-      console.log(res);
-      window.location.assign("/login");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-
-function isLoggedIn() {
+function isLoggedIn(setLogged = null) {
   axios
     .get(URL + "/user", {
       headers: {
@@ -82,11 +56,19 @@ function isLoggedIn() {
       },
     })
     .then((res) => {
-      console.log(res);
+      console.log(res.data);
+      if (setLogged != null) {
+        setLogged(true);
+      }
+      return res;
     })
     .catch((error) => {
       console.log(error);
+      if (setLogged != null) {
+        setLogged(false);
+      }
+      return error;
     });
 }
 
-export { createUser, loginUser, logoutUser, isLoggedIn };
+export { createUser, loginUser, isLoggedIn };

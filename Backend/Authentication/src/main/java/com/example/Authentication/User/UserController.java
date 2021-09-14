@@ -16,9 +16,13 @@ public class UserController {
         return service.getUser(id);
     }
 
+//    @GetMapping
+//    public String test() {
+//        return "GET TEST! ";
+//    }
     @GetMapping
-    public String test() {
-        return "GET TEST! ";
+    public ResponseEntity<Object> isLoggedIn() {
+        return service.isLoggedIn();
     }
 
     @PostMapping("/login")
